@@ -32,18 +32,18 @@ Zodiac.hasMany(Friend);
 const syncAndSeed = async ()=>{
     try{
         //insert zodiac signs
-        const aries = await Zodiac.create({name: 'aries'});
-        const taurus = await Zodiac.create({name: 'taurus'});
-        const gemini = await Zodiac.create({name: 'gemini'});
-        const cancer = await Zodiac.create({name: 'cancer'});
-        const leo = await Zodiac.create({name: 'leo'});
-        const virgo = await Zodiac.create({name: 'virgo'});
-        const libra = await Zodiac.create({name: 'libra'});
-        const scorpio = await Zodiac.create({name: 'scorpio'});
-        const sagittarius = await Zodiac.create({name: 'sagittarius'});
-        const capricorn = await Zodiac.create({name: 'capricorn'});
-        const aquarius = await Zodiac.create({name: 'aquarius'});
-        const pisces = await Zodiac.create({name: 'pisces'});
+        const aries = await Zodiac.create({name: 'Aries'});
+        const taurus = await Zodiac.create({name: 'Taurus'});
+        const gemini = await Zodiac.create({name: 'Gemini'});
+        const cancer = await Zodiac.create({name: 'Cancer'});
+        const leo = await Zodiac.create({name: 'Leo'});
+        const virgo = await Zodiac.create({name: 'Virgo'});
+        const libra = await Zodiac.create({name: 'Libra'});
+        const scorpio = await Zodiac.create({name: 'Scorpio'});
+        const sagittarius = await Zodiac.create({name: 'Sagittarius'});
+        const capricorn = await Zodiac.create({name: 'Capricorn'});
+        const aquarius = await Zodiac.create({name: 'Aquarius'});
+        const pisces = await Zodiac.create({name: 'Pisces'});
 
         //insert friends
         await Friend.create({name: 'Natalia', birthday: '1/18', zodiacId: capricorn.id});
@@ -82,7 +82,7 @@ const syncAndSeed = async ()=>{
 //express
 const express = require('express');
 const app = express();
-
+app.use(express.urlencoded({extended: false}));
 
 //routes
 app.get('/', async(req,res,next)=>{
@@ -92,7 +92,36 @@ app.get('/', async(req,res,next)=>{
             include: [ Zodiac ]
         });
 
-        res.send(friends);
+        console.log(friends);
+
+        const html = friends.map(friend=>{
+            return `
+                <div class = 'friendName'>
+                    ${friend.name}
+                </div>
+                <div class = 'birthday'>
+                    ${friend.birthday} - 
+                </div>
+                <div class = 'sign'>
+                    <a href ='/zodiac/${friend.zodiacId}'> ${friend.zodiac.name} </a>
+                </div>
+            `;
+        }).join('');
+
+
+        res.send(`
+            <html>
+                <head>
+                    <title> Birthdays </title>
+                </head>
+
+                <body>
+                    <h1>Friends' Birthdays</h1>
+
+                    ${html}
+                </body>
+            </html>
+        `);
     }
     catch(err){
         next(err);
@@ -101,11 +130,31 @@ app.get('/', async(req,res,next)=>{
 
 app.get('/zodiac/:id', async(req,res,next)=>{
     try{
-        const people = await Zodiac.findByPk(req.params.id, {
+        const sign = await Zodiac.findByPk(req.params.id, {
             include:  [Friend] 
         });
+        
+        const html = sign.friends.map(friend=>{
+            return `
+                <div>
+                    ${friend.name}, birthday is ${friend.birthday}
+                </div>
+            `;
+        }).join('');
 
-        res.send(people);
+        res.send(`
+            <html>
+                <head>
+                    <title>${sign.name} Friends</title>
+                </head>
+
+                <body>
+                    <h1>${sign.name} Friends</h1>
+                    <a href='/'>Go Back</a>
+                    ${html}
+                </body>
+            </html>
+        `);
     }
     catch(err){
         next(err);
