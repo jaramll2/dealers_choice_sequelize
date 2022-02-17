@@ -23,6 +23,9 @@ const Zodiac = sequelize.define('zodiac',{
         validate: {
             notEmpty: true
         }
+    },
+    symbol:{
+        type: STRING
     }
 });
 
@@ -32,18 +35,18 @@ Zodiac.hasMany(Friend);
 const syncAndSeed = async ()=>{
     try{
         //insert zodiac signs
-        const aries = await Zodiac.create({name: 'Aries'});
-        const taurus = await Zodiac.create({name: 'Taurus'});
-        const gemini = await Zodiac.create({name: 'Gemini'});
-        const cancer = await Zodiac.create({name: 'Cancer'});
-        const leo = await Zodiac.create({name: 'Leo'});
-        const virgo = await Zodiac.create({name: 'Virgo'});
-        const libra = await Zodiac.create({name: 'Libra'});
-        const scorpio = await Zodiac.create({name: 'Scorpio'});
-        const sagittarius = await Zodiac.create({name: 'Sagittarius'});
-        const capricorn = await Zodiac.create({name: 'Capricorn'});
-        const aquarius = await Zodiac.create({name: 'Aquarius'});
-        const pisces = await Zodiac.create({name: 'Pisces'});
+        const aries = await Zodiac.create({name: 'Aries', symbol: '&#9800' });
+        const taurus = await Zodiac.create({name: 'Taurus', symbol: '&#9801'});
+        const gemini = await Zodiac.create({name: 'Gemini', symbol: '&#9802'});
+        const cancer = await Zodiac.create({name: 'Cancer', symbol:'&#9803'});
+        const leo = await Zodiac.create({name: 'Leo', symbol:'&#9804'});
+        const virgo = await Zodiac.create({name: 'Virgo', symbol: '&#9805'});
+        const libra = await Zodiac.create({name: 'Libra', symbol: '&#9806'});
+        const scorpio = await Zodiac.create({name: 'Scorpio', symbol: '&#9807'});
+        const sagittarius = await Zodiac.create({name: 'Sagittarius', symbol:'&#9808'});
+        const capricorn = await Zodiac.create({name: 'Capricorn', symbol: '&#9809'});
+        const aquarius = await Zodiac.create({name: 'Aquarius', symbol: '&#9810'});
+        const pisces = await Zodiac.create({name: 'Pisces', symbol:'&#9811'});
 
         //insert friends
         await Friend.create({name: 'Natalia', birthday: '1/18', zodiacId: capricorn.id});
@@ -102,7 +105,7 @@ app.get('/', async(req,res,next)=>{
                     ${friend.birthday} 
                 </div>
                 <div class = 'sign'>
-                    <a href ='/zodiac/${friend.zodiacId}'> ${friend.zodiac.name} </a>
+                    <a href ='/zodiac/${friend.zodiacId}'> ${friend.zodiac.symbol} ${friend.zodiac.name} ${friend.zodiac.symbol} </a>
                 </div>
             `;
         }).join('');
@@ -116,7 +119,7 @@ app.get('/', async(req,res,next)=>{
                 </head>
 
                 <body>
-                    <h1>Friends' Birthdays</h1>
+                    <h1>⭐Friends' Birthdays ⭐</h1>
 
                     <div id='list'>
                         ${html}
@@ -152,10 +155,11 @@ app.get('/zodiac/:id', async(req,res,next)=>{
                 </head>
 
                 <body>
-                    <h1>${sign.name} Friends <small> <a href='/'>(Go Back)</a> </small></h1> 
+                    <h1>${sign.symbol} ${sign.name} Friends ${sign.symbol} </h1> 
                     
                     <div class ='friendList'>
                         ${html}
+                        <small> <a href='/'>(Go Back)</a> </small>
                     </div>
                 </body>
             </html>
