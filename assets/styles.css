@@ -1,0 +1,31 @@
+h1 {
+    text-align: center;
+}
+
+#list{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 500px;
+    margin-right: 500px;
+}
+
+.friendName, .birthday, .sign{
+    display: flex;
+    width: calc(100%/3);
+}
+
+a{
+    font-size: 15px;
+}
+
+.friendList{
+    display: flex;
+    flex-direction: column;
+    margin-left: 500px;
+    margin-right: 500px;
+    text-align: center;
+}
+
+.friendBirthday{
+    margin:10px;
+}

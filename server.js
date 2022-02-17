@@ -82,6 +82,7 @@ const syncAndSeed = async ()=>{
 //express
 const express = require('express');
 const app = express();
+app.use('/assets',express.static('assets'));
 app.use(express.urlencoded({extended: false}));
 
 //routes
@@ -92,15 +93,13 @@ app.get('/', async(req,res,next)=>{
             include: [ Zodiac ]
         });
 
-        console.log(friends);
-
         const html = friends.map(friend=>{
             return `
                 <div class = 'friendName'>
                     ${friend.name}
                 </div>
                 <div class = 'birthday'>
-                    ${friend.birthday} - 
+                    ${friend.birthday} 
                 </div>
                 <div class = 'sign'>
                     <a href ='/zodiac/${friend.zodiacId}'> ${friend.zodiac.name} </a>
@@ -113,12 +112,15 @@ app.get('/', async(req,res,next)=>{
             <html>
                 <head>
                     <title> Birthdays </title>
+                    <link rel='stylesheet' href='/assets/styles.css' />
                 </head>
 
                 <body>
                     <h1>Friends' Birthdays</h1>
 
-                    ${html}
+                    <div id='list'>
+                        ${html}
+                    </div>
                 </body>
             </html>
         `);
@@ -136,7 +138,7 @@ app.get('/zodiac/:id', async(req,res,next)=>{
         
         const html = sign.friends.map(friend=>{
             return `
-                <div>
+                <div class = 'friendBirthday'>
                     ${friend.name}, birthday is ${friend.birthday}
                 </div>
             `;
@@ -146,12 +148,15 @@ app.get('/zodiac/:id', async(req,res,next)=>{
             <html>
                 <head>
                     <title>${sign.name} Friends</title>
+                    <link rel='stylesheet' href='/assets/styles.css' />
                 </head>
 
                 <body>
-                    <h1>${sign.name} Friends</h1>
-                    <a href='/'>Go Back</a>
-                    ${html}
+                    <h1>${sign.name} Friends <small> <a href='/'>(Go Back)</a> </small></h1> 
+                    
+                    <div class ='friendList'>
+                        ${html}
+                    </div>
                 </body>
             </html>
         `);
